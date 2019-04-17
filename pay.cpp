@@ -1,26 +1,27 @@
 //Brian Chairez
 //CPSC 301 Section 2
 
+// Brian Chairez
+// 301 Section 2
 #include "person.cpp"
+#include <vector>
 
 using namespace std;
 
 //Function Prototypes
-void readData(Person P[], int &size);
-void writeData(Person P[], int &size);
+void readData(vector<Person> &P);
+void writeData(vector<Person> &P);
 
 int main()
 {
-  int size;
-  int temp = 20;
-  Person p[temp];
-  readData(p,size);
-  writeData(p,size);
+  vector<Person> p;
+  readData(p);
+  writeData(p);
   return 0;
 }
 
 //Reads in a data file and initializes each person's info
-void readData(Person P[], int &size)
+void readData(vector<Person> &P)
 {
   int i =0;
   string firstname;
@@ -36,24 +37,20 @@ void readData(Person P[], int &size)
     exit(1);
   }
 
-  while (!infile.eof())
+  while (infile)
   {
     infile >> firstname >> lastname >> hours >> pay;
-    P[i].setFirstName(firstname);
-    P[i].setLastName(lastname);
-    P[i].setPayRate(pay);
-    P[i].setHoursWorked(hours);
-    i++;
-    infile>>ws;
+    Person per(firstname, lastname, hours, pay);
+    P.emplace_back(per);
   }
 
-  size = i;
+  i = P.size();
 
   infile.close();
 }
 
 //Outputs person's name and pay rate to a different text file
-void writeData(Person P[], int &size)
+void writeData(vector<Person> &P)
 {
   ofstream outfile;
   outfile.open("output.txt");
@@ -63,9 +60,9 @@ void writeData(Person P[], int &size)
     exit(1);
   }
 
-  for (int i = 0; i<size; i++)
+  for (int i = 0; i<P.size(); i++)
   {
-    outfile << P[i].fullName() << " " << fixed << setprecision(2) << P[i].totalPay()<<endl;
+    outfile << P.at(i).fullName() << " " << fixed << setprecision(2) << P.at(i).totalPay()<<endl;
 
   }
 
